@@ -8,6 +8,7 @@ import (
 
 	"clean_architecture_gin/api/presenter"
 	"clean_architecture_gin/pkg/entities"
+
 )
 
 type Repository interface {
@@ -15,6 +16,7 @@ type Repository interface {
 	StoreRepository(user *entities.User) (*entities.User, error)
 	ShowRepository(id string) (*entities.User, error)
 	UpdateRepository(id string, user *entities.User) (*entities.User, error)
+	DeleteRepository(id string) (*entities.User, error)
 }
 
 type repository struct {
@@ -69,4 +71,17 @@ func (r *repository) UpdateRepository(id string, user *entities.User) (*entities
 	r.Database.Save(&userModel)
 
 	return &userModel, nil
+}
+
+func (r *repository) DeleteRepository(id string) (*entities.User, error) {
+	var user *entities.User
+
+	r.Database.Where("id = ?", id).First(&user)
+
+	err := r.Database.Delete(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

@@ -15,6 +15,7 @@ type Service interface {
 	StoreService(user *entities.User) (*entities.User, error)
 	ShowService(id string) (*entities.User, error)
 	UpdateService(id string, user *entities.User) (*entities.User, error)
+	DeleteService(id string) (*entities.User, error)
 }
 
 type service struct {
@@ -66,6 +67,15 @@ func (s *service) UpdateService(id string, user *entities.User) (*entities.User,
 	user.Password = hash
 
 	return s.repository.UpdateRepository(id, user)
+}
+
+func (s *service) DeleteService(id string) (*entities.User, error) {
+	data, err := s.repository.DeleteRepository(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
 
 func HashPassword(password string) (string, error) {

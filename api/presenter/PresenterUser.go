@@ -7,19 +7,18 @@ import (
 	"github.com/google/uuid"
 
 	"clean_architecture_gin/pkg/entities"
-
 )
 
 type User struct {
 	ID          uuid.UUID `json:"uuid"`
-	Name        string    `json:"name"`
-	Username    string    `json:"username"`
-	Gender      string    `json:"gender"`
-	Address     string    `json:"address"`
-	PhoneNumber string    `json:"phone_number"`
-	Bod         time.Time `json:"bod"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	Name        string    `json:"name,omitempty"`
+	Username    string    `json:"username,omitempty"`
+	Gender      string    `json:"gender,omitempty"`
+	Address     string    `json:"address,omitempty"`
+	PhoneNumber string    `json:"phone_number,omitempty"`
+	Bod         time.Time `json:"bod,omitempty"`
+	CreatedAt   time.Time `json:"created_at,omitempty"`
+	UpdatedAt   time.Time `json:"updated_at,omitempty"`
 	Password    string    `json:"password,omitempty"`
 }
 
@@ -40,6 +39,18 @@ func UserSuccessResponse(data *entities.User) *gin.H {
 	return &gin.H{
 		"status": true,
 		"result": user,
+	}
+}
+
+func UserDeleteResponse(data *entities.User) *gin.H {
+	user := User{
+		ID: data.ID,
+	}
+
+	return &gin.H{
+		"status":  true,
+		"user_id": user.ID,
+		"message": "User successfully deleted",
 	}
 }
 

@@ -6,6 +6,7 @@ import (
 	"clean_architecture_gin/api/presenter"
 	"clean_architecture_gin/pkg/entities"
 	"clean_architecture_gin/pkg/user"
+
 )
 
 func IndexHandler(service user.Service) gin.HandlerFunc {
@@ -64,5 +65,18 @@ func UpdateHandler(service user.Service) gin.HandlerFunc {
 		}
 
 		c.JSON(200, presenter.UserSuccessResponse(result))
+	}
+}
+
+func DeleteHandler(service user.Service) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("id")
+		result, err := service.DeleteService(id)
+
+		if err != nil {
+			c.JSON(500, presenter.UserErrorResponse(err))
+		}
+
+		c.JSON(200, presenter.UserDeleteResponse(result))
 	}
 }
